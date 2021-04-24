@@ -45,6 +45,10 @@ public class MaDemoIG {
 
         //Rotation des pièces à chaque clics
         int incr=1;
+        int avant = 0;
+        int apres = 2;
+        int col = 0;
+        int col1 =6;
         int avance = 0;
         int recule = 2;
         while(incr <5) {
@@ -54,15 +58,30 @@ public class MaDemoIG {
                 for (int j = 0; j < 7; j++) {
                     IG.changerPiecePlateau(i, j, 2, incr);
                     IG.changerPieceHorsPlateau(1, incr);
-                    //EXEMPLE BILLES
-                    //IG.placerBilleSurPlateau(3, 0, 1, 0, 2);
                 }
             }
+            //Déplacement joueurs
             avance++;
             recule--;
-            System.out.println(recule);
             IG.placerJoueurPrecis(0,3,0,1,avance);
             IG.placerJoueurPrecis(1,3,6,1,recule);
+            //Gestion billes
+            if (avant <= 3 && apres >= 0) {
+                IG.placerBilleSurPlateau(3, col, 1, avant, 2);
+                IG.placerBilleSurPlateau(3, col1, 1, apres, 2);
+                avant++;
+                apres--;
+            }
+            else{
+                avant = 0;
+                apres = 2;
+                col++;
+                col1--;
+                IG.placerBilleSurPlateau(3, col, 1, avant, 2);
+                IG.placerBilleSurPlateau(3, col1, 1, apres, 2);
+            }
+
+
             message[0] = "";
             message[1] = "Après le clic " + incr;
             message[2] = "Cliquez pour continuer ... ";
