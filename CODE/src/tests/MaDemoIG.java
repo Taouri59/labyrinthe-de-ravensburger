@@ -33,6 +33,43 @@ public class MaDemoIG {
         IG.placerJoueurPrecis(0,3,0,1,0);
         IG.placerJoueurPrecis(1,3,6,1,2);
 
+        //Positionner les objets sur le plateau pour 3 joueurs
+        int y = 0;
+        int x = 0;
+        int temp = 0;
+        int numJoueur = 0;
+        int objet = 0;
+        for(int obj=0; obj<6; obj++){
+            IG.changerObjetJoueur(numJoueur, obj, obj);
+            IG.placerObjetPlateau(obj, x, y);
+            y++;
+            objet = obj;
+        }
+        numJoueur++;
+        for(int obj2=0; obj2<6; obj2++){
+            objet++;
+            IG.changerObjetJoueur(numJoueur, objet, obj2);
+            IG.placerObjetPlateau(objet, x, y);
+            if (obj2 == 0) {
+                x++;
+                y = 0;
+            }
+            else
+                y++;
+        }
+        numJoueur++;
+        for(int obj3=0; obj3<6; obj3++){
+            objet++;
+            IG.changerObjetJoueur(numJoueur, objet, obj3);
+            IG.placerObjetPlateau(objet, x, y);
+            if (obj3 == 1) {
+                x++;
+                y = 0;
+            }
+            else
+                y++;
+        }
+
         //Gestion des messages
         String[] message = new String[]{"", "", "", ""};
         message[0] = "";
@@ -51,6 +88,9 @@ public class MaDemoIG {
         int col1 =6;
         int avance = 0;
         int recule = 2;
+        int tmp =0;
+        x = 0;
+        y =0;
         while(incr <5) {
             IG.miseAJourAffichage();
             IG.attendreClic();
@@ -67,8 +107,8 @@ public class MaDemoIG {
             IG.placerJoueurPrecis(1,3,6,1,recule);
             //Gestion billes
             if (avant <= 3 && apres >= 0) {
-                IG.placerBilleSurPlateau(3, col, 1, avant, 2);
-                IG.placerBilleSurPlateau(3, col1, 1, apres, 2);
+                IG.placerBilleSurPlateau(3, col, 1, avant, 0);
+                IG.placerBilleSurPlateau(3, col1, 1, apres, 0);
                 avant++;
                 apres--;
             }
@@ -77,10 +117,15 @@ public class MaDemoIG {
                 apres = 2;
                 col++;
                 col1--;
-                IG.placerBilleSurPlateau(3, col, 1, avant, 2);
-                IG.placerBilleSurPlateau(3, col1, 1, apres, 2);
+                IG.placerBilleSurPlateau(3, col, 1, avant, 0);
+                IG.placerBilleSurPlateau(3, col1, 1, apres, 0);
             }
 
+            //Gestion objets plateau
+            IG.changerObjetJoueurAvecTransparence(0,tmp,tmp);
+            IG.enleverObjetPlateau(x,y);
+            y++;
+            tmp++;
 
             message[0] = "";
             message[1] = "Après le clic " + incr;
