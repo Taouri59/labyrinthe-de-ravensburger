@@ -23,15 +23,15 @@ public class MaDemoIG {
         IG.changerImageJoueur(0, numImageJoueur0);
 
         //Pour le joueur 2
-        int numImageJoueur1 = (Integer)parametres[3];
         String nomJoueur1 = (String)parametres[1];
         String categorieJoueur1 = (String)parametres[2];
+        int numImageJoueur1 = (Integer)parametres[3];
         IG.changerNomJoueur(1, nomJoueur1 + " (" + categorieJoueur1 + ")");
         IG.changerImageJoueur(1, numImageJoueur1);
 
         //Positionner les joueurs sur le plateau
-        IG.placerJoueurSurPlateau(0, 3, 0);
-        IG.placerJoueurSurPlateau(1, 3, 6);
+        IG.placerJoueurPrecis(0,3,0,1,0);
+        IG.placerJoueurPrecis(1,3,6,1,2);
 
         //Gestion des messages
         String[] message = new String[]{"", "", "", ""};
@@ -46,7 +46,7 @@ public class MaDemoIG {
         //Rotation des pièces à chaque clics
         int incr=1;
         int avance = 0;
-        int recule = 6;
+        int recule = 2;
         while(incr <5) {
             IG.miseAJourAffichage();
             IG.attendreClic();
@@ -54,17 +54,20 @@ public class MaDemoIG {
                 for (int j = 0; j < 7; j++) {
                     IG.changerPiecePlateau(i, j, 2, incr);
                     IG.changerPieceHorsPlateau(1, incr);
-                    //IG.placerBilleSurPlateau(7, i, 3, avance, 2);
-                    //IG.placerBilleSurPlateau(7, i, 3, recule, 2);
+                    //EXEMPLE BILLES
+                    //IG.placerBilleSurPlateau(3, 0, 1, 0, 2);
                 }
             }
+            avance++;
+            recule--;
+            System.out.println(recule);
+            IG.placerJoueurPrecis(0,3,0,1,avance);
+            IG.placerJoueurPrecis(1,3,6,1,recule);
             message[0] = "";
             message[1] = "Après le clic " + incr;
             message[2] = "Cliquez pour continuer ... ";
             message[3] = "";
             IG.afficherMessage(message);
-            avance++;
-            recule++;
             incr++;
         }
         for (int i = 0; i < 7; i++) {
