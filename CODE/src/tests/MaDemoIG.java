@@ -14,62 +14,84 @@ public class MaDemoIG {
             }
         }
         IG.changerPieceHorsPlateau(1, 0);
-
         //Pour le joueur 1
         int numImageJoueur0 = (Integer)parametres[3];
         String nomJoueur0 = (String)parametres[1];
         String categorieJoueur0 = (String)parametres[2];
         IG.changerNomJoueur(0, nomJoueur0 + " (" + categorieJoueur0 + ")");
         IG.changerImageJoueur(0, numImageJoueur0);
-
         //Pour le joueur 2
         String nomJoueur1 = (String)parametres[1];
         String categorieJoueur1 = (String)parametres[2];
         int numImageJoueur1 = (Integer)parametres[3];
         IG.changerNomJoueur(1, nomJoueur1 + " (" + categorieJoueur1 + ")");
         IG.changerImageJoueur(1, numImageJoueur1);
-
         //Positionner les joueurs sur le plateau
         IG.placerJoueurPrecis(0,3,0,1,0);
         IG.placerJoueurPrecis(1,3,6,1,2);
-
         //Positionner les objets sur le plateau pour 3 joueurs
         int y = 0;
         int x = 0;
         int temp = 0;
         int numJoueur = 0;
         int objet = 0;
-        for(int obj=0; obj<6; obj++){
-            IG.changerObjetJoueur(numJoueur, obj, obj);
-            IG.placerObjetPlateau(obj, x, y);
-            y++;
-            objet = obj;
-        }
-        numJoueur++;
-        for(int obj2=0; obj2<6; obj2++){
-            objet++;
-            IG.changerObjetJoueur(numJoueur, objet, obj2);
-            IG.placerObjetPlateau(objet, x, y);
-            if (obj2 == 0) {
-                x++;
-                y = 0;
-            }
-            else
+        //3 joueurs
+        if (nbJoueurs == 3) {
+            for (int obj = 0; obj < 6; obj++) {
+                IG.changerObjetJoueur(numJoueur, obj, obj);
+                IG.placerObjetPlateau(obj, x, y);
                 y++;
-        }
-        numJoueur++;
-        for(int obj3=0; obj3<6; obj3++){
-            objet++;
-            IG.changerObjetJoueur(numJoueur, objet, obj3);
-            IG.placerObjetPlateau(objet, x, y);
-            if (obj3 == 1) {
-                x++;
-                y = 0;
+                objet = obj;
             }
-            else
-                y++;
+            numJoueur++;
+            for (int obj2 = 0; obj2 < 6; obj2++) {
+                objet++;
+                IG.changerObjetJoueur(numJoueur, objet, obj2);
+                IG.placerObjetPlateau(objet, x, y);
+                if (obj2 == 0) {
+                    x++;
+                    y = 0;
+                } else
+                    y++;
+            }
+            numJoueur++;
+            for (int obj3 = 0; obj3 < 6; obj3++) {
+                objet++;
+                IG.changerObjetJoueur(numJoueur, objet, obj3);
+                IG.placerObjetPlateau(objet, x, y);
+                if (obj3 == 1) {
+                    x++;
+                    y = 0;
+                } else
+                    y++;
+            }
         }
-
+        //2 joueurs
+        else{
+            for (int obj = 0; obj < 9; obj++) {
+                IG.changerObjetJoueur(numJoueur, obj, obj);
+                IG.placerObjetPlateau(obj, x, y);
+                    if (y>=6) {
+                        x++;
+                        y=-1;
+                    }
+                y++;
+                objet = obj;
+                System.out.println(objet);
+            }
+            numJoueur++;
+            objet++; //position après le dernier item
+            for (int obj2 = 0; obj2 < 9; obj2++) {
+                IG.changerObjetJoueur(numJoueur, objet, obj2);
+                IG.placerObjetPlateau(objet, x, y);
+                if (objet==13) {
+                    x++;
+                    y=-1;
+                }
+                y++;
+                objet++;
+            }
+        }
         //Gestion des messages
         String[] message = new String[]{"", "", "", ""};
         message[0] = "";
@@ -79,7 +101,6 @@ public class MaDemoIG {
         IG.afficherMessage(message);
         IG.rendreVisibleFenetreJeu();
         IG.attendreClic();
-
         //Rotation des pièces à chaque clics
         int incr=1;
         int avant = 0;
@@ -120,13 +141,11 @@ public class MaDemoIG {
                 IG.placerBilleSurPlateau(3, col, 1, avant, 0);
                 IG.placerBilleSurPlateau(3, col1, 1, apres, 0);
             }
-
             //Gestion objets plateau
             IG.changerObjetJoueurAvecTransparence(0,tmp,tmp);
             IG.enleverObjetPlateau(x,y);
             y++;
             tmp++;
-
             message[0] = "";
             message[1] = "Après le clic " + incr;
             message[2] = "Cliquez pour continuer ... ";
@@ -141,7 +160,6 @@ public class MaDemoIG {
         }
         IG.changerPieceHorsPlateau(1, 0);
         IG.miseAJourAffichage();
-
         IG.attendreClic();
         IG.afficherGagnant(numImageJoueur0);
         message[0] = "";
@@ -162,6 +180,5 @@ public class MaDemoIG {
         IG.pause(2000);
         IG.fermerFenetreJeu();
         System.exit(0);
-
     }
 }
