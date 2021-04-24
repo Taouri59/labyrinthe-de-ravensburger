@@ -15,17 +15,26 @@ public class MaDemoIG {
         }
         IG.changerPieceHorsPlateau(1, 0);
         //Pour le joueur 1
-        int numImageJoueur0 = (Integer)parametres[3];
         String nomJoueur0 = (String)parametres[1];
         String categorieJoueur0 = (String)parametres[2];
+        int numImageJoueur0 = (Integer)parametres[3];
         IG.changerNomJoueur(0, nomJoueur0 + " (" + categorieJoueur0 + ")");
         IG.changerImageJoueur(0, numImageJoueur0);
         //Pour le joueur 2
-        String nomJoueur1 = (String)parametres[1];
-        String categorieJoueur1 = (String)parametres[2];
-        int numImageJoueur1 = (Integer)parametres[3];
-        IG.changerNomJoueur(1, nomJoueur1 + " (" + categorieJoueur1 + ")");
+        String nomJoueur1 = (String)parametres[4];
+        String categorieJoueur1 = (String)parametres[5];
+        int numImageJoueur1 = (Integer)parametres[6];
+        IG.changerNomJoueur(1,nomJoueur1 + " (" + categorieJoueur1 + ")");
         IG.changerImageJoueur(1, numImageJoueur1);
+        if (nbJoueurs == 3) {
+            //Pour le joueur 3
+            String nomJoueur2 = (String) parametres[7];
+            String categorieJoueur2 = (String) parametres[8];
+            int numImageJoueur2 = (Integer) parametres[9];
+            IG.changerNomJoueur(2, nomJoueur2 + " (" + categorieJoueur1 + ")");
+            IG.changerImageJoueur(2, numImageJoueur2);
+        }
+
         //Positionner les joueurs sur le plateau
         IG.placerJoueurPrecis(0,3,0,1,0);
         IG.placerJoueurPrecis(1,3,6,1,2);
@@ -77,7 +86,6 @@ public class MaDemoIG {
                     }
                 y++;
                 objet = obj;
-                System.out.println(objet);
             }
             numJoueur++;
             objet++; //position après le dernier item
