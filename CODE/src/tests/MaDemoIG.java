@@ -3,22 +3,6 @@ package tests;
 import grafix.interfaceGraphique.IG;
 
 public class MaDemoIG {
-    //methode
-    private static void initJoueur(int numJoueur,Object[] parametres) {
-        String nomJoueur = (String) parametres[numJoueur*3+1];
-        String categorieJoueur = (String) parametres[numJoueur*3+2];
-        int numImageJoueur = (Integer) parametres[numJoueur*3+3];
-        IG.changerNomJoueur(numJoueur,nomJoueur + "(" + categorieJoueur + ")");
-        IG.changerImageJoueur(numJoueur,numImageJoueur);
-        switch (numJoueur) {
-            case 0 :
-                IG.placerJoueurSurPlateau(numJoueur,0,0);
-            case 1 :
-                IG.placerJoueurSurPlateau(numJoueur,0,6);
-            case 2 :
-                IG.placerJoueurSurPlateau(numJoueur,6,6);
-        }
-    }
     //main
     public static void main(String[] args) {
         //création de la fenêtre de jeu
@@ -33,8 +17,20 @@ public class MaDemoIG {
         }
         IG.changerPieceHorsPlateau(1, 0);
         //initialisation des joueur
-        for (int i=0; i<nbJoueurs; i++) {
-            initJoueur(i,parametres);
+        for (int numJoueur=0; numJoueur<nbJoueurs; numJoueur++) {
+            String nomJoueur = (String) parametres[numJoueur*3+1];
+            String categorieJoueur = (String) parametres[numJoueur*3+2];
+            int numImageJoueur = (Integer) parametres[numJoueur*3+3];
+            IG.changerNomJoueur(numJoueur,nomJoueur + "(" + categorieJoueur + ")");
+            IG.changerImageJoueur(numJoueur,numImageJoueur);
+            switch (numJoueur) {
+                case 0 :
+                    IG.placerJoueurSurPlateau(numJoueur,0,0);
+                case 1 :
+                    IG.placerJoueurSurPlateau(numJoueur,0,6);
+                case 2 :
+                    IG.placerJoueurSurPlateau(numJoueur,6,6);
+            }
         }
         //Positionnement spécial des joueur 1 et 2
         IG.placerJoueurPrecis(0,3,0,1,0);
