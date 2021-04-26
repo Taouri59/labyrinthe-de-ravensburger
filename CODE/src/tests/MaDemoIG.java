@@ -3,96 +3,55 @@ package tests;
 import grafix.interfaceGraphique.IG;
 
 public class MaDemoIG {
-
+    //methode
+    private static void initJoueur(int numJoueur,Object[] parametres) {
+        String nomJoueur = (String) parametres[numJoueur*3+1];
+        String categorieJoueur = (String) parametres[numJoueur*3+2];
+        int numImageJoueur = (Integer) parametres[numJoueur*3+3];
+        IG.changerNomJoueur(numJoueur,nomJoueur + "(" + categorieJoueur + ")");
+        IG.changerImageJoueur(numJoueur,numImageJoueur);
+        switch (numJoueur) {
+            case 0 :
+                IG.placerJoueurSurPlateau(numJoueur,0,0);
+            case 1 :
+                IG.placerJoueurSurPlateau(numJoueur,0,6);
+            case 2 :
+                IG.placerJoueurSurPlateau(numJoueur,6,6);
+        }
+    }
+    //main
     public static void main(String[] args) {
+        //création de la fenêtre de jeu
         Object[] parametres = IG.saisirParametres();
         int nbJoueurs = (Integer)parametres[0];
         IG.creerFenetreJeu("Démo Librairie IG version 1.9", nbJoueurs);
+        //remplir le plateau
         for(int i=0; i<7; i++){
             for(int j=0;j<7;j++) {
                 IG.changerPiecePlateau(i, j, 2, 0);
             }
         }
         IG.changerPieceHorsPlateau(1, 0);
-        //Pour le joueur 1
-        String nomJoueur0 = (String)parametres[1];
-        String categorieJoueur0 = (String)parametres[2];
-        int numImageJoueur0 = (Integer)parametres[3];
-        IG.changerNomJoueur(0, nomJoueur0 + " (" + categorieJoueur0 + ")");
-        IG.changerImageJoueur(0, numImageJoueur0);
-        //Pour le joueur 2
-        String nomJoueur1 = (String)parametres[4];
-        String categorieJoueur1 = (String)parametres[5];
-        int numImageJoueur1 = (Integer)parametres[6];
-        IG.changerNomJoueur(1,nomJoueur1 + " (" + categorieJoueur1 + ")");
-        IG.changerImageJoueur(1, numImageJoueur1);
-        if (nbJoueurs == 3) {
-            //Pour le joueur 3
-            String nomJoueur2 = (String) parametres[7];
-            String categorieJoueur2 = (String) parametres[8];
-            int numImageJoueur2 = (Integer) parametres[9];
-            IG.changerNomJoueur(2, nomJoueur2 + " (" + categorieJoueur1 + ")");
-            IG.changerImageJoueur(2, numImageJoueur2);
+        //initialisation des joueur
+        for (int i=0; i<nbJoueurs; i++) {
+            initJoueur(i,parametres);
         }
-
-        //Positionner les joueurs sur le plateau
+        //Positionnement spécial des joueur 1 et 2
         IG.placerJoueurPrecis(0,3,0,1,0);
         IG.placerJoueurPrecis(1,3,6,1,2);
-        //Positionner les objets sur le plateau pour 3 joueurs
+        //Positionner les objets sur le plateau
         int y = 0;
         int x = 0;
-        int temp = 0;
-        int numJoueur = 0;
         int objet = 0;
-        //3 joueurs
-        if (nbJoueurs == 3) {
-            for (int obj = 0; obj < 6; obj++) {
-                IG.changerObjetJoueur(numJoueur, obj, obj);
-                IG.placerObjetPlateau(obj, x, y);
-                y++;
-                objet = obj;
-            }
-            numJoueur++;
-            for (int obj2 = 0; obj2 < 6; obj2++) {
-                objet++;
-                IG.changerObjetJoueur(numJoueur, objet, obj2);
-                IG.placerObjetPlateau(objet, x, y);
-                if (obj2 == 0) {
-                    x++;
-                    y = 0;
-                } else
-                    y++;
-            }
-            numJoueur++;
-            for (int obj3 = 0; obj3 < 6; obj3++) {
-                objet++;
-                IG.changerObjetJoueur(numJoueur, objet, obj3);
-                IG.placerObjetPlateau(objet, x, y);
-                if (obj3 == 1) {
-                    x++;
-                    y = 0;
-                } else
-                    y++;
-            }
+        int nbObjetParJoueur = 6; // 3 joueur
+        if (nbJoueurs == 2) {
+            nbObjetParJoueur = 9; // 2 joueur
         }
-        //2 joueurs
-        else{
-            for (int obj = 0; obj < 9; obj++) {
-                IG.changerObjetJoueur(numJoueur, obj, obj);
-                IG.placerObjetPlateau(obj, x, y);
-                    if (y>=6) {
-                        x++;
-                        y=-1;
-                    }
-                y++;
-                objet = obj;
-            }
-            numJoueur++;
-            objet++; //position après le dernier item
-            for (int obj2 = 0; obj2 < 9; obj2++) {
-                IG.changerObjetJoueur(numJoueur, objet, obj2);
+        for (int numJoueur=0; numJoueur<nbJoueurs; numJoueur++) {
+            for (int obj=0; obj<nbObjetParJoueur; obj++) {
+                IG.changerObjetJoueur(numJoueur, objet, obj);
                 IG.placerObjetPlateau(objet, x, y);
-                if (objet==13) {
+                if (y==6) {
                     x++;
                     y=-1;
                 }
@@ -100,7 +59,7 @@ public class MaDemoIG {
                 objet++;
             }
         }
-        //Gestion des messages
+        //initialisation des messages
         String[] message = new String[]{"", "", "", ""};
         message[0] = "";
         message[1] = "Bonjour !";
@@ -108,81 +67,65 @@ public class MaDemoIG {
         message[3] = "";
         IG.afficherMessage(message);
         IG.rendreVisibleFenetreJeu();
-        IG.attendreClic();
         //Rotation des pièces à chaque clics
         int incr=1;
-        int avant = 0;
-        int apres = 2;
-        int col = 0;
-        int col1 =6;
-        int avance = 0;
-        int recule = 2;
+        int col = 0; // colonne du joueur 1
+        int col1 =6; // colonne du joueur 2
+        int avance = 0; // sous colonne du joueur 1
+        int recule = 2; // sous colonne du joeur 2
         int tmp =0;
         x = 0;
         y =0;
         while(incr <5) {
             IG.miseAJourAffichage();
             IG.attendreClic();
+            //rotation piece
             for (int i = 0; i < 7; i++) {
                 for (int j = 0; j < 7; j++) {
                     IG.changerPiecePlateau(i, j, 2, incr);
-                    IG.changerPieceHorsPlateau(1, incr);
                 }
             }
-            //Déplacement joueurs
+            IG.changerPieceHorsPlateau(1, incr);
+            //Déplacement joueurs + gestion billes
+            IG.placerBilleSurPlateau(3, col, 1, avance, 0); // bille joueur 1
+            IG.placerBilleSurPlateau(3, col1, 1, recule, 0); // bille joueur 2
             avance++;
             recule--;
-            IG.placerJoueurPrecis(0,3,0,1,avance);
-            IG.placerJoueurPrecis(1,3,6,1,recule);
-            //Gestion billes
-            if (avant <= 3 && apres >= 0) {
-                IG.placerBilleSurPlateau(3, col, 1, avant, 0);
-                IG.placerBilleSurPlateau(3, col1, 1, apres, 0);
-                avant++;
-                apres--;
-            }
-            else{
-                avant = 0;
-                apres = 2;
+            IG.placerJoueurPrecis(0,3,col,1,avance); //deplace joueur 1
+            IG.placerJoueurPrecis(1,3,col1,1,recule); //deplace joueur 2
+            if (avance == 3 && recule == -1) {
+                avance = 0;
+                recule = 2;
                 col++;
                 col1--;
-                IG.placerBilleSurPlateau(3, col, 1, avant, 0);
-                IG.placerBilleSurPlateau(3, col1, 1, apres, 0);
             }
             //Gestion objets plateau
             IG.changerObjetJoueurAvecTransparence(0,tmp,tmp);
             IG.enleverObjetPlateau(x,y);
             y++;
             tmp++;
-            message[0] = "";
             message[1] = "Après le clic " + incr;
-            message[2] = "Cliquez pour continuer ... ";
-            message[3] = "";
             IG.afficherMessage(message);
             incr++;
         }
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
                 IG.changerPiecePlateau(i, j, 2, 0);
-            }
+           }
         }
         IG.changerPieceHorsPlateau(1, 0);
         IG.miseAJourAffichage();
         IG.attendreClic();
-        IG.afficherGagnant(numImageJoueur0);
-        message[0] = "";
+        IG.afficherGagnant((Integer) parametres[3]); // prametres[3] recup le numero de l'image du joueur 1 (parametres[0*3+3])
         message[1] = "Cliquez sur une flèche";
         message[2] = "pour quitter !";
-        message[3] = "";
         IG.afficherMessage(message);
         IG.miseAJourAffichage();
         int i = IG.attendreChoixEntree();
         IG.selectionnerFleche(i);
         IG.miseAJourAffichage();
-        message[0] = "";
         message[1] = "Arrêt du programme";
         message[2] = "dans 2 secondes !";
-        message[3] = "";
         IG.afficherMessage(message);
         IG.miseAJourAffichage();
         IG.pause(2000);
