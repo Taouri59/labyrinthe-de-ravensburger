@@ -24,7 +24,7 @@ public class Utils {
         return generateur.nextInt(max+1);
     }
     /**
-     * A faire (27/04/2021 MC NonFait)
+     * A Faire (27/04/2021 MC Finie)
      *
      * Méthode permettant de savoir si oui ou non l'entier n donnée en paramétre est dans le tableau d'entier
      * tab donnée en paramètre.
