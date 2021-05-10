@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="libIG19" type="kotlin.js">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../LIBRAIRIE/libIG19.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
