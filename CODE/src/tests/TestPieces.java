@@ -1,4 +1,5 @@
 package tests;
+;
 
 import composants.Piece;
 import grafix.interfaceGraphique.IG;
@@ -19,9 +20,45 @@ public class TestPieces {
         IG.afficherMessage(message);
         IG.rendreVisibleFenetreJeu();
         IG.attendreClic();
+
         //Insertion des pièces avec la méthode nouvellesPieces
         Piece.nouvellesPieces();
         IG.miseAJourAffichage();
         IG.attendreClic();
+        Piece[] terrain=Piece.nouvellesPieces();
+        int n=0; //compteur
+        for (int i=0;i<7;i++){
+            for(int j=0;j<7;j++){
+                Piece piece= terrain[n];
+                IG.changerPiecePlateau(i,j,piece.getModelePiece(),piece.getOrientationPiece());
+                n++;
+
+            }
+        }
+        IG.changerPieceHorsPlateau(terrain[49].getModelePiece(),terrain[49].getOrientationPiece());
+        IG.miseAJourAffichage();
+
+        for (int y =0;y<4;y++){
+            n=0;
+            IG.attendreClic();
+            for (int i = 0; i < 7; i++) {
+                for (int j = 0; j < 7; j++) {
+                    terrain[n].rotation();
+                    IG.changerPiecePlateau(i, j,terrain[n].getModelePiece(),terrain[n].getOrientationPiece());
+                    n++;
+                }
+            }
+            terrain[49].rotation();
+            IG.changerPieceHorsPlateau(terrain[49].getModelePiece(),terrain[49].getOrientationPiece());
+            System.out.println(terrain[49]);
+
+            IG.miseAJourAffichage();
+
+        }
+        IG.attendreClic();
+        IG.fermerFenetreJeu();
+
+
+
     }
 }
