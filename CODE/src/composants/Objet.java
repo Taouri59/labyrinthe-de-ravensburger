@@ -14,19 +14,23 @@ public class Objet {
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (15/05/21 MP Finalisée)
 	 * 
 	 * Constructeur permettant de construire un objet qui est initialement hors du plateau.
 	 * 
 	 * @param numObjet Le numéro de l'objet.
 	 */
+
 	public Objet(int numObjet) {
-		// A Compléter
+		this.numObjet = numObjet;
+		this.posLignePlateau = -1;
+		this.posColonnePlateau = -1;
+		this.surPlateau = false ;
 	}
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire A Faire (15/05/21 MP a finir )
 	 * 
 	 * Méthode permettant de générer un tableau contenant les 18 objets du jeu.
 	 * Les objets seront postionnées aléatoirement sur le plateau.  Deux objets ne pourront pas être sur une même case (même ligne et même colonne).
@@ -35,53 +39,62 @@ public class Objet {
 	 *
 	 */
 	public static Objet[] nouveauxObjets(){
-		Objet[] objets = null;
-		// A Compléter
+		Objet[] objets = new Objet[18];
+		int numLigne=0;
+		int numColonne=0;
+		int [] ligne=Utils.genereTabIntAleatoirement(6);
+		int[] colonne=Utils.genereTabIntAleatoirement(6);
+		for (int objet=0;objet<17;objet++){
+			objets[objet]= new Objet(objet);
+			//objets[objet].posLignePlateau=ligne[objet];
+			//objets[objet].posColonnePlateau=colonne[objet];
+			objets[objet].positionneObjet(ligne[objet],colonne[objet]);
+
+
+		}
 		return objets;
 	}
 
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (15/05/21 MP Finalisée)
 	 * 
 	 * Méthode retournant le numéro de l'objet.
 	 * 
 	 * @return Le numéro de l'objet.
 	 */
-	public int getNumeroObjet() {
-		return -1; // A Modifier
+	public int getNumObjet() {
+		return numObjet;
 	}
-
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (15/05/21 MP Finalisée)
 	 * 
 	 * Méthode retournant le numéro de la ligne sur laquelle se trouve l'objet.
 	 * 
 	 * @return Le numéro de la ligne sur laquelle se trouve l'objet.
 	 */
 	public int getPosLignePlateau() {
-		return -1; // A Modifier
+		return posLignePlateau;
 	}
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (15/05/21 MP Finalisée)
 	 * 
 	 * Méthode retournant le numéro de la colonne sur laquelle se trouve l'objet.
 	 * 
 	 * @return Le numéro de la colonne sur laquelle se trouve l'objet.
 	 */
 	public int getPosColonnePlateau() {
-		return -1; // A Modifier
+		return posColonnePlateau;
 	}
-	
-	
+
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (15/05/21 MP Finalisée)
 	 * 
 	 * Méthode permettant de positionner l'objet sur une ligne et une colonne données en paramètre.
 	 * 
@@ -89,33 +102,45 @@ public class Objet {
 	 * @param colonnePlateau Un entier compris entre 0 et 6.
 	 */
 	public void positionneObjet(int lignePlateau,int colonnePlateau){
-		// A Compléter
+		this.posLignePlateau= lignePlateau;
+		this.posColonnePlateau= colonnePlateau;
+		if(this.posLignePlateau!=-1 && this.posColonnePlateau!=-1){
+			this.surPlateau=true;
+		}
 	}
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (15/05/21 MP Finalisée)
 	 * 
 	 * Méthode permettant d'enlever l'objet du plateau.
 	 * 
 	 */
 	public void enleveDuPlateau(){
-		// A Compléter
+		  this.posLignePlateau=-1;
+		  this.posColonnePlateau=-1;
+		  this.surPlateau=false;
+
+
+
 	}
 	
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (15/05/21 MP Finalisée)
 	 * 
 	 * Méthode indiquant si l'objet est sur le plateau au non.
 	 * 
 	 * @return true si l'objet est sur le plateau, false sinon.
 	 */
 	public boolean surPlateau() {
-		return false; // A Modifier
+		return this.surPlateau();
+
+
 	}
 
 	/**
+	 * A Faire (15/05/21 MP Finalisée)
 	 * Méthode permettant d'obtenir une représentation d'un objet sous forme de chaîne de caractères.
 	 */
 	@Override
@@ -125,7 +150,7 @@ public class Objet {
 	}
 
 	/**
-	 * 
+	 * A Faire (15/05/21 MP Finalisée)
 	 * Méthode permettant de copier l'objet.
 	 * 
 	 * @return Une copie de l'objet.
@@ -139,6 +164,7 @@ public class Objet {
 	}
 
 	/**
+	 * A Faire (15/05/21 MP Finalisée)
 	 * Programme testant quelques méthodes de la classe Objet.
 	 * @param args arguments du programme
 	 */
