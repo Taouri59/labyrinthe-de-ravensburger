@@ -40,17 +40,23 @@ public class Objet {
 	 */
 	public static Objet[] nouveauxObjets(){
 		Objet[] objets = new Objet[18];
-		int numLigne=0;
-		int numColonne=0;
-		int [] ligne=Utils.genereTabIntAleatoirement(6);
-		int[] colonne=Utils.genereTabIntAleatoirement(6);
-		for (int objet=0;objet<17;objet++){
+		int[][] posUse = new int[18][2];
+		int nbPos = 0;
+		for (int objet=0;objet<18;objet++){
 			objets[objet]= new Objet(objet);
-			//objets[objet].posLignePlateau=ligne[objet];
-			//objets[objet].posColonnePlateau=colonne[objet];
-			objets[objet].positionneObjet(ligne[objet],colonne[objet]);
-
-
+			boolean t=true;
+			while (t) {
+				t = false;
+				objets[objet].positionneObjet(Utils.genererEntier(6), Utils.genererEntier(6));
+				for (int i = 0; i < nbPos; i++) {
+					if (posUse[i][0] == objets[objet].getPosLignePlateau() && posUse[i][1] == objets[objet].getPosColonnePlateau()) {
+						t = true;
+					}
+				}
+			}
+			posUse[nbPos][0]=objets[objet].getPosLignePlateau();
+			posUse[nbPos][1]=objets[objet].getPosColonnePlateau();
+			nbPos++;
 		}
 		return objets;
 	}
