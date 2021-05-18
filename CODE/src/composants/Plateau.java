@@ -29,7 +29,7 @@ public class Plateau {
 	 * @param colonnePlateau La colonne du plateau sur laquelle sera placée la pièce (une entier entre 0 et 6).
 	 */
 	public void positionnePiece(Piece piece,int lignePlateau,int colonnePlateau){
-		Piece[lignePlateau][colonnePlateau] = piece;
+		plateau[lignePlateau][colonnePlateau] = piece;
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class Plateau {
 	 * @return La seule pièce qui n'a pas été placée sur le plateau
 	 */
 	public Piece placerPiecesAleatoierment(){
-		Piece[] listePiece = Piece.nouvellesPieces();
+		Piece[] listePiece = composants.Piece.nouvellesPieces();
 		int compteur = 0 ;
 		for(int i = 0 ; i < plateau.length ; i++){
 			for(int j = 0 ; j < plateau[i].length ; j++){
@@ -91,7 +91,8 @@ public class Plateau {
 
 	/**
 	 * 
-	 * A Faire (16/05/21 TN Finalisée)
+	 * Fait (16/05/21 TN Finalisée)
+	 * Modifié (18/05/21 BC Finalisée)
 	 * 
 	 * Méthode permettant de tester si les positions passées en paramètre sont les positions de deux cases différentes et adjacentes 
 	 * de la grille de jeu et qu'il est possible de passer d'une cas à l'autre compte tenu des deux pièces posées sur les deux cases du plateau.
@@ -106,18 +107,18 @@ public class Plateau {
 		if (!casesAdjacentes(posLigCase1,posColCase1,posLigCase2,posColCase2)){
 			return false ;
 		}
-		boolean[] entree1 = plateau[posLigCase1][posColCase1].getPointEntree();
-		boolean[] entree2 = plateau[posLigCase2][posColCase2].getPointEntree();
-		if(entree1[0]==entree2[2] && posLigCase2==posLigCase1-1){
+		Piece piece1 = plateau[posLigCase1][posColCase1];
+		Piece piece2 = plateau[posLigCase2][posColCase2];
+		if(piece1.getPointEntree(0) == piece2.getPointEntree(2) && posLigCase2==posLigCase1-1){
 			return true ;
 		}
-		if(entree1[2]==entree2[0] && posLigCase1==posLigCase2-1){
+		if(piece1.getPointEntree(2)==piece2.getPointEntree(0) && posLigCase1==posLigCase2-1){
 			return true ;
 		}
-		if(entree1[1]==entree2[3] && posColCase2==posColCase1+1){
+		if(piece1.getPointEntree(1)==piece2.getPointEntree(3) && posColCase2==posColCase1+1){
 			return true ;
 		}
-		if(entree1[3]==entree2[1] && posColCase2==posColCase1-1){
+		if(piece1.getPointEntree(3)==piece2.getPointEntree(1) && posColCase2==posColCase1-1){
 			return true ;
 		}
 		return false;
@@ -143,9 +144,12 @@ public class Plateau {
 	 */
 	public int[][] calculeChemin(int posLigCaseDep,int posColCaseDep,int posLigCaseArr,int posColCaseArr){
 		int[][] resultat = null;
-		
-		// A Compléter
-		
+		int nbChemins = 0;
+		int[][][] chemins = new int[50][50][2];
+
+		chemins[0][0][0] = posLigCaseDep;
+		chemins[0][0][1] = posColCaseDep;
+		while()
 		return resultat;
 	}
 
