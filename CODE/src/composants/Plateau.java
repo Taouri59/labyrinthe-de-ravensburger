@@ -7,45 +7,47 @@ package composants;
 public class Plateau {
 
 	private Piece[][] plateau; // La grille des pièces.
+	private Object Piece;
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (16/05/21 TN Finalisée)
 	 * 
 	 * Constructeur permettant de construire un plateau vide (sans pièces) et d'une taille de 7 lignes sur 7 colonnes.
 	 */
+
 	public Plateau() {
-		// A Compléter
+	plateau = new Piece[7][7];
 	}
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (16/05/21 TN Finalisée)
+	 *
 	 * Méthode permettant de placer une pièce sur le plateau.
-	 * 
+	 *
 	 * @param piece La pièce à placer.
 	 * @param lignePlateau La ligne du plateau sur laquelle sera placée la pièce (un entier entre 0 et 6).
 	 * @param colonnePlateau La colonne du plateau sur laquelle sera placée la pièce (une entier entre 0 et 6).
 	 */
 	public void positionnePiece(Piece piece,int lignePlateau,int colonnePlateau){
-		// A Compléter
+		Piece[lignePlateau][colonnePlateau] = piece;
 	}
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (16/05/21 TN Finalisée)
+	 *
 	 * Méthode retournant une pièce se trouvant sur le plateau à un emplacement spécifique.
-	 * 
+	 *
 	 * @param lignePlateau La ligne du plateau  (un entier entre 0 et 6).
 	 * @param colonnePlateau La colonne du plateau (un entier entre 0 et 6).
 	 * @return La pièce se trouvant sur la ligne lignePlateau et la colonne colonnePlateau. Si il n'y a pas de pièce, null est retourné.
 	 */
 	public Piece getPiece(int lignePlateau,int colonnePlateau){
-		return null; // A Modfier
+		return plateau[lignePlateau][colonnePlateau];
 	}
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (16/05/21 TN Finalisée)
 	 *  
 	 * Méthode permettant de placer aléatoirment 49 pièces du jeu sur le plateau.
 	 * L'orientation des pièces est aléatoire. Les pièces utilisées doivent être des nouvelles pièces générées à partir de la méthode Piece.nouvellesPieces.
@@ -54,8 +56,15 @@ public class Plateau {
 	 * @return La seule pièce qui n'a pas été placée sur le plateau
 	 */
 	public Piece placerPiecesAleatoierment(){
-		// A Compléter
-		return null; // A Modfier
+		Piece[] listePiece = Piece.nouvellesPieces();
+		int compteur = 0 ;
+		for(int i = 0 ; i < plateau.length ; i++){
+			for(int j = 0 ; j < plateau[i].length ; j++){
+				plateau[i][j] = listePiece[compteur];
+				compteur++;
+			}
+		}
+		return listePiece[49];
 	}
 
 	/**
@@ -82,7 +91,7 @@ public class Plateau {
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (16/05/21 TN Finalisée)
 	 * 
 	 * Méthode permettant de tester si les positions passées en paramètre sont les positions de deux cases différentes et adjacentes 
 	 * de la grille de jeu et qu'il est possible de passer d'une cas à l'autre compte tenu des deux pièces posées sur les deux cases du plateau.
@@ -94,15 +103,29 @@ public class Plateau {
 	 * @return true si les positions passées en paramètre sont les positions de deux cases différentes et adjacentes de la grille de jeu et qu'il est possible de passer d'une cas à l'autre compte tenu des deux pièces posées sur les deux cases du plateau, false sinon.
 	 */
 	private boolean passageEntreCases(int posLigCase1,int posColCase1,int posLigCase2,int posColCase2){
-		
-		// A Compléter
-		
-		return false; // A Modifier
+		if (!casesAdjacentes(posLigCase1,posColCase1,posLigCase2,posColCase2)){
+			return false ;
+		}
+		boolean[] entree1 = plateau[posLigCase1][posColCase1].getPointEntree();
+		boolean[] entree2 = plateau[posLigCase2][posColCase2].getPointEntree();
+		if(entree1[0]==entree2[2] && posLigCase2==posLigCase1-1){
+			return true ;
+		}
+		if(entree1[2]==entree2[0] && posLigCase1==posLigCase2-1){
+			return true ;
+		}
+		if(entree1[1]==entree2[3] && posColCase2==posColCase1+1){
+			return true ;
+		}
+		if(entree1[3]==entree2[1] && posColCase2==posColCase1-1){
+			return true ;
+		}
+		return false;
 	}
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (16/05/21 TN Finalisée)
 	 * 
 	 * Méthode permettant de retourner un éventuel chemin entre deux cases du plateau compte tenu des pièces posées sur le plateau.
 	 * Dans le cas où il n'y a pas de chemin entre les deux cases, la valeur null est retournée.
