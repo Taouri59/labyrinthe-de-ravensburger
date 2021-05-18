@@ -110,7 +110,7 @@ public class Plateau {
 		}
 		Piece piece1 = plateau[posLigCase1][posColCase1];
 		Piece piece2 = plateau[posLigCase2][posColCase2];
-		if(piece1.getPointEntree(0)==piece2.getPointEntree(2) && posLigCase2==posLigCase1-1){
+		if(piece1.getPointEntree(0) == piece2.getPointEntree(2) && posLigCase2==posLigCase1-1){
 			return true ;
 		}
 		if(piece1.getPointEntree(2)==piece2.getPointEntree(0) && posLigCase1==posLigCase2-1){
