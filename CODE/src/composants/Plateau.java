@@ -1,5 +1,7 @@
 package composants;
 
+import java.util.*;
+
 /**
  * Cette classe permet de gérer un plateau de jeu constitué d'une grille de pièces (grille de 7 lignes sur 7 colonnes).
  *
@@ -29,7 +31,7 @@ public class Plateau {
 	 * @param colonnePlateau La colonne du plateau sur laquelle sera placée la pièce (une entier entre 0 et 6).
 	 */
 	public void positionnePiece(Piece piece,int lignePlateau,int colonnePlateau){
-		Piece[lignePlateau][colonnePlateau] = piece;
+		plateau[lignePlateau][colonnePlateau] = piece;
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class Plateau {
 	 * @return La seule pièce qui n'a pas été placée sur le plateau
 	 */
 	public Piece placerPiecesAleatoierment(){
-		Piece[] listePiece = Piece.nouvellesPieces();
+		Piece[] listePiece = composants.Piece.nouvellesPieces();
 		int compteur = 0 ;
 		for(int i = 0 ; i < plateau.length ; i++){
 			for(int j = 0 ; j < plateau[i].length ; j++){
@@ -106,18 +108,18 @@ public class Plateau {
 		if (!casesAdjacentes(posLigCase1,posColCase1,posLigCase2,posColCase2)){
 			return false ;
 		}
-		boolean[] entree1 = plateau[posLigCase1][posColCase1].getPointEntree();
-		boolean[] entree2 = plateau[posLigCase2][posColCase2].getPointEntree();
-		if(entree1[0]==entree2[2] && posLigCase2==posLigCase1-1){
+		Piece piece1 = plateau[posLigCase1][posColCase1];
+		Piece piece2 = plateau[posLigCase2][posColCase2];
+		if(piece1.getPointEntree(0)==piece2.getPointEntree(2) && posLigCase2==posLigCase1-1){
 			return true ;
 		}
-		if(entree1[2]==entree2[0] && posLigCase1==posLigCase2-1){
+		if(piece1.getPointEntree(2)==piece2.getPointEntree(0) && posLigCase1==posLigCase2-1){
 			return true ;
 		}
-		if(entree1[1]==entree2[3] && posColCase2==posColCase1+1){
+		if(piece1.getPointEntree(1)==piece2.getPointEntree(3) && posColCase2==posColCase1+1){
 			return true ;
 		}
-		if(entree1[3]==entree2[1] && posColCase2==posColCase1-1){
+		if(piece1.getPointEntree(3)==piece2.getPointEntree(1) && posColCase2==posColCase1-1){
 			return true ;
 		}
 		return false;
@@ -125,7 +127,7 @@ public class Plateau {
 
 	/**
 	 * 
-	 * A Faire (16/05/21 TN Finalisée)
+	 * A Faire (18/05/21 MC Finie)
 	 * 
 	 * Méthode permettant de retourner un éventuel chemin entre deux cases du plateau compte tenu des pièces posées sur le plateau.
 	 * Dans le cas où il n'y a pas de chemin entre les deux cases, la valeur null est retournée.
@@ -142,11 +144,68 @@ public class Plateau {
 	 * @return null si il n'existe pas de chemin entre les deux case, un chemin sinon.
 	 */
 	public int[][] calculeChemin(int posLigCaseDep,int posColCaseDep,int posLigCaseArr,int posColCaseArr){
-		int[][] resultat = null;
-		
-		// A Compléter
-		
-		return resultat;
+		//Initialisation du tableau des chemins
+		ArrayList<ArrayList<ArrayList<Integer>>> chemins = new ArrayList<>();
+		chemins.add(new ArrayList<>(new ArrayList<>()));
+		chemins.get(0).get(0).add(posLigCaseDep);
+		chemins.get(0).get(0).add(posColCaseDep);
+		//Calcul du chemin
+		while (chemins.size()>0) {
+			//Recherche du plus petit chemin
+			int indexShortestPath = 0; // index du chemin le plus court
+			for (ArrayList<ArrayList<Integer>> chemin : chemins) {
+				if (chemin.size()<chemins.get(indexShortestPath).size()) {
+					indexShortestPath=chemin.size();
+				}
+			}
+			ArrayList<ArrayList<Integer>> shortestPath = chemins.get(indexShortestPath); // chemin le plus court
+			//Si le chemin le plus court (shortestPath) arrive jusque la case d'arriver alors retourner shortestPath sous le bon format
+			if (shortestPath.get(shortestPath.size()-1).get(0)==posLigCaseArr && shortestPath.get(shortestPath.size()-1).get(1)==posColCaseArr) {
+				int[][] resultat = new int[shortestPath.size()][2];
+				for (int i=0; i<shortestPath.size(); i++) {
+					ArrayList<Integer> coord = shortestPath.get(i);
+					int[] couple = new int[2];
+					couple[0]=coord.get(0);
+					couple[1]=coord.get(1);
+					resultat[i]=couple;
+				}
+				return resultat;
+			}
+			//Prolongement du shortestPath
+			ArrayList<Integer> lastPiece = shortestPath.get(shortestPath.size()-1); //Dernier piece du chemin
+			int[][] coordForPieceAdj = {{-1,0},{1,0},{0,-1},{0,1}};
+			for (int[] coordToAdd : coordForPieceAdj) { // sert a parcourir toute les piece candidate au prolongement
+				//initialisation de la piece candidate
+				ArrayList<Integer> piece2 = new ArrayList<Integer>();
+				piece2.add(lastPiece.get(0)+coordToAdd[0]);
+				piece2.add(lastPiece.get(1)+coordToAdd[1]);
+				if (!passageEntreCases(lastPiece.get(0),lastPiece.get(1),piece2.get(0),piece2.get(1))) {continue;} //Si la piece candidate n'est pas connecter a la lastPiece alors passer a la pice candidate suivante
+				//Verifie que la piece candidate n'est pas déjà dans le chemin (que le serpent ne se mord pas la queue) sinon passe a la suivante
+				boolean test=false;
+				for (int i=0; i<shortestPath.size()-1; i++) {
+					ArrayList<Integer> piece3 = shortestPath.get(i);
+					if(piece2.get(0)==piece3.get(0) && piece2.get(1)==piece3.get(1)) {test=true;break;}
+				}
+				if (test) {continue;}
+				//Vérifie si la prochaine arrivé (piece2) n'est pas déjà une arrivé d'un autre chemin plus court, le chemin le plus long des deux est supprimé !
+				test=false;
+				for (ArrayList<ArrayList<Integer>> chemin : chemins) {
+					if (chemin.get(chemin.size()-1)==piece2) {
+						if (chemin.size()>shortestPath.size()+1) {chemins.remove(chemin);}
+						else {test=true;}
+						break;
+					}
+				}
+				if (test) {continue;}
+				//creation du nouveaux chemin
+				ArrayList<ArrayList<Integer>> chemin = new ArrayList<ArrayList<Integer>>();
+				Collections.copy(chemin,shortestPath);
+				chemin.add(piece2);
+				chemins.add(chemin);
+			}
+			chemins.remove(shortestPath);
+		}
+		return null;
 	}
 
 
