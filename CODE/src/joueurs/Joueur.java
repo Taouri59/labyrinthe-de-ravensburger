@@ -20,7 +20,7 @@ public abstract class Joueur {
 	private int posColonne; // La colonne correspondant à la position du joueur sur le plateau
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Constructeur permettant de créer un joueur à partir de son nom, son type et 
 	 * le numéro de l'image le représentant. La position du joueur sur le plateau doit être
@@ -33,7 +33,13 @@ public abstract class Joueur {
 	 * @param posColonnePlateau La colonne du plateau sur laquelle est positionnés le joueur.
 	 */
 	public Joueur(int numJoueur,String nomJoueur, int numeroImagePersonnage,int posLignePlateau,int posColonnePlateau) {
-		// A Compléter
+		this.numJoueur=numJoueur;
+		this.nomJoueur=nomJoueur;
+		this.numeroImagePersonnage=numeroImagePersonnage;
+		this.posLigne=posLignePlateau;
+		this.posColonne=posColonnePlateau;
+		this.objetsJoueur=null;
+		nombreObjetsRecuperes=0;
 	}
 
 	/**
@@ -78,73 +84,66 @@ public abstract class Joueur {
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 *  
 	 * Méthode retournant le nombre d'objets récupérés par le joueur.
 	 * 
 	 * @return Le nombre d'objets récupérés par le joueur.
 	 */
-	public int getNombreObjetsRecuperes() {
-		return -1; // A Modifier
-	}
+	public int getNombreObjetsRecuperes() {return nombreObjetsRecuperes;}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 *  
 	 * Méthode retournant la ligne du plateau sur laquelle se trouve le joueur.
 	 * @return  La ligne du plateau sur laquelle se trouve le joueur.
 	 */
-	public int getPosLigne() {
-		return -1; // A Modifier
-	}
+	public int getPosLigne() {return posLigne;}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Méthode retournant la colonne du plateau sur laquelle se trouve le joueur.
 	 * @return La colonne du plateau sur laquelle se trouve le joueur.
 	 */
-	public int getPosColonne() {
-		return -1; // A Modifier
-	}
+	public int getPosColonne() {return posColonne;}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Méthode retournant le nom du joueur.
 	 * @return Le nom du joueur.
 	 */
-	public String getNomJoueur() {
-		return null; // A Modifier
-	}
+	public String getNomJoueur() {return nomJoueur;}
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Méthode retournant le numéro de l'image représentant le joueur.
 	 * @return Le numéro de l'image représentant le joueur.
 	 */
-	public int getNumeroImagePersonnage() {
-		return -1; // A Modifier
-	}
+	public int getNumeroImagePersonnage() {return numeroImagePersonnage;}
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Méthode permettant d'affecter au joueur les objets qu'il devra récupérer durant le jeu.
 	 * Attention : cette méthode devra créer un nouveau tableau pour l'attribut this.objetsARecuperer.
 	 * 
 	 * @param objetsARecuperer Un tableau contenant les objets à récupérer dans l'ordre.
 	 */
-	public void setObjetsJoueur(Objet objetsARecuperer[]){
-		// A Compléter
+	public void setObjetsJoueur(Objet[] objetsARecuperer){
+		//init objetsJoueur / creation du nouveau tableau
+		objetsJoueur = new Objet[objetsARecuperer.length];
+		// remplissage du tableau
+		System.arraycopy(objetsARecuperer, 0, objetsJoueur, 0, objetsARecuperer.length);
 	}
 	
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Méthode retournant un nouveau tableau contenant les objets attribués au joueur. Des objets à récupérer devront être
 	 * affectés au joueur avant tout appel de cette méthode (on suppose donc que l'attribut objetsJoueur est non null).
@@ -152,25 +151,21 @@ public abstract class Joueur {
 	 * @return Un tableau d'Objet correspondant aux objets à récupérer du joueur.
 	 */
 	public Objet[] getObjetsJoueur(){
-		Objet[] resultat=null;
-
-		// A Compléter
-
+		Objet[] resultat = new Objet[objetsJoueur.length];
+		System.arraycopy(objetsJoueur,0,resultat,0,objetsJoueur.length);
 		return resultat;
 	}
 	
 	
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Méthode retournant le prochain objet à récupérer par le joueur.
 	 * Avant d'appeler cette méthode il est nécessaire de s'assurer qu'il existe encore des objets à récupérer.
 	 * 
 	 * @return Le prochain objet à récupérer par le joueur.
 	 */
-	public Objet getProchainObjet(){
-		return null; // A Modifier
-	}
+	public Objet getProchainObjet(){return objetsJoueur[nombreObjetsRecuperes];}
 	
 	/**
 	 * 
@@ -184,15 +179,13 @@ public abstract class Joueur {
 	
 
 	/**
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (19/05/21 MC Finie)
 	 * 
 	 * Méthode retournant le numéro du joueur.
 	 * 
 	 * @return Le numéro du joueur.
 	 */
-	public int getNumJoueur(){
-		return -1; // A Modifier
-	}
+	public int getNumJoueur(){return numJoueur;}
 	
 	/**
 	 * 
