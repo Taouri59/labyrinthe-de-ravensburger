@@ -7,7 +7,7 @@ package composants;
  */
 public class Objet {
 
-	private int numObjet; // Le numéro de l'objet (un entier entre 0 et 17).
+	private final int numObjet; // Le numéro de l'objet (un entier entre 0 et 17).
 	private int posLignePlateau; // La ligne du plateau sur laquelle est éventuellement posé l'objet (un entier entre -1 et 6, -1:lorsqu'il n'est pas sur le plateau).
 	private int posColonnePlateau; // La colonne du plateau sur laquelle est éventuellement posé l'objet (un entier entre -1 et 6, -1:lorsqu'il n'est pas sur le plateau).
 	private boolean surPlateau; // Indique si l'objet est sur le plateau ou non (true : sur le plateau, false : hors du plateau).
@@ -51,6 +51,7 @@ public class Objet {
 				for (int i = 0; i < nbPos; i++) {
 					if (posUse[i][0] == objets[objet].getPosLignePlateau() && posUse[i][1] == objets[objet].getPosColonnePlateau()) {
 						t = true;
+						break;
 					}
 				}
 			}
@@ -178,14 +179,11 @@ public class Objet {
 		// Un petit test ...
 		System.out.println("*** Génération et affichage des 18 objets ... ***");
 		Objet[] objetsJeu = nouveauxObjets();
-		for (int i=0;i<objetsJeu.length;i++)
-			System.out.println(objetsJeu[i]);
+		for (Objet objet : objetsJeu) System.out.println(objet);
 		System.out.println("*** On enlève les 18 objets du plateau ... ***");
-		for (int i=0;i<objetsJeu.length;i++)
-			 objetsJeu[i].enleveDuPlateau();
+		for (Objet objet : objetsJeu) objet.enleveDuPlateau();
 		System.out.println("*** On affiche de nouveau les 18 objets ... ***");
-		for (int i=0;i<objetsJeu.length;i++)
-			System.out.println(objetsJeu[i]);
+		for (Objet objet : objetsJeu) System.out.println(objet);
 	}
 	
 }

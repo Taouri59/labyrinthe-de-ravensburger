@@ -86,9 +86,7 @@ public class Plateau {
 		if (distLigne<0) distLigne=-distLigne;
 		int distColonne=posColCase1-posColCase2;
 		if (distColonne<0) distColonne=-distColonne;
-		if ((distLigne>1)||(distColonne>1)||((distColonne+distLigne)!=1))
-			return false;
-		return true;
+		return (distLigne <= 1) && (distColonne <= 1) && ((distColonne + distLigne) == 1);
 	}
 
 	/**
@@ -110,19 +108,16 @@ public class Plateau {
 		}
 		Piece piece1 = plateau[posLigCase1][posColCase1];
 		Piece piece2 = plateau[posLigCase2][posColCase2];
-		if(piece1.getPointEntree(0) == piece2.getPointEntree(2) && posLigCase2==posLigCase1-1){
+		if(piece1.getPointEntree(0) && piece2.getPointEntree(2) && posLigCase2==posLigCase1-1){
 			return true ;
 		}
-		if(piece1.getPointEntree(2)==piece2.getPointEntree(0) && posLigCase1==posLigCase2-1){
+		if(piece1.getPointEntree(2) && piece2.getPointEntree(0) && posLigCase1==posLigCase2-1){
 			return true ;
 		}
-		if(piece1.getPointEntree(1)==piece2.getPointEntree(3) && posColCase2==posColCase1+1){
+		if(piece1.getPointEntree(1) && piece2.getPointEntree(3) && posColCase2==posColCase1+1){
 			return true ;
 		}
-		if(piece1.getPointEntree(3)==piece2.getPointEntree(1) && posColCase2==posColCase1-1){
-			return true ;
-		}
-		return false;
+		return piece1.getPointEntree(3) && piece2.getPointEntree(1) && posColCase2 == posColCase1 - 1;
 	}
 
 	/**
@@ -144,52 +139,46 @@ public class Plateau {
 	 * @return null si il n'existe pas de chemin entre les deux case, un chemin sinon.
 	 */
 	public int[][] calculeChemin(int posLigCaseDep,int posColCaseDep,int posLigCaseArr,int posColCaseArr){
+		// ATTENTION : Cette methode contient des variable dont le nom contient piece sans pour autant être de la class Piece (se seront les coordonnée de la piece), voir le type de la variable
 		//Initialisation du tableau des chemins
-		ArrayList<ArrayList<ArrayList<Integer>>> chemins = new ArrayList<>();
-		chemins.add(new ArrayList<>(new ArrayList<>()));
-		chemins.get(0).get(0).add(posLigCaseDep);
-		chemins.get(0).get(0).add(posColCaseDep);
+		ArrayList<ArrayList<int[]>> chemins = new ArrayList<>(); // une list de chemin, un chemin étant une list de piece, une piece est representer par ces coordonnée sur le plateau (getPiece pour obtenir la veritable piece)
+		chemins.add(new ArrayList<>()); // ajout d'un chemin vide
+		chemins.get(0).add(new int[]{posLigCaseDep,posColCaseDep}); //ajout d'une piece (ces coordonnée) dans le chemin 0
 		//Calcul du chemin
 		while (chemins.size()>0) {
 			//Recherche du plus petit chemin
-			int indexShortestPath = 0; // index du chemin le plus court
-			for (ArrayList<ArrayList<Integer>> chemin : chemins) {
-				if (chemin.size()<chemins.get(indexShortestPath).size()) {
-					indexShortestPath=chemin.size();
+			ArrayList<int[]> shortestPath = chemins.get(0); // chemin le plus court
+			for (ArrayList<int[]> chemin : chemins) {
+				if (chemin.size()<shortestPath.size()) {
+					shortestPath=chemin;
 				}
 			}
-			ArrayList<ArrayList<Integer>> shortestPath = chemins.get(indexShortestPath); // chemin le plus court
 			//Si le chemin le plus court (shortestPath) arrive jusque la case d'arriver alors retourner shortestPath sous le bon format
-			if (shortestPath.get(shortestPath.size()-1).get(0)==posLigCaseArr && shortestPath.get(shortestPath.size()-1).get(1)==posColCaseArr) {
+			int[] lastPiece = shortestPath.get(shortestPath.size()-1); //Dernier piece du chemin
+			if (lastPiece[0]==posLigCaseArr && lastPiece[1]==posColCaseArr) {
 				int[][] resultat = new int[shortestPath.size()][2];
 				for (int i=0; i<shortestPath.size(); i++) {
-					ArrayList<Integer> coord = shortestPath.get(i);
-					int[] couple = new int[2];
-					couple[0]=coord.get(0);
-					couple[1]=coord.get(1);
-					resultat[i]=couple;
+					int[] piece = shortestPath.get(i);
+					resultat[i]=new int[]{piece[0],piece[1]};
 				}
 				return resultat;
 			}
 			//Prolongement du shortestPath
-			ArrayList<Integer> lastPiece = shortestPath.get(shortestPath.size()-1); //Dernier piece du chemin
 			int[][] coordForPieceAdj = {{-1,0},{1,0},{0,-1},{0,1}};
 			for (int[] coordToAdd : coordForPieceAdj) { // sert a parcourir toute les piece candidate au prolongement
 				//initialisation de la piece candidate
-				ArrayList<Integer> piece2 = new ArrayList<Integer>();
-				piece2.add(lastPiece.get(0)+coordToAdd[0]);
-				piece2.add(lastPiece.get(1)+coordToAdd[1]);
-				if (!passageEntreCases(lastPiece.get(0),lastPiece.get(1),piece2.get(0),piece2.get(1))) {continue;} //Si la piece candidate n'est pas connecter a la lastPiece alors passer a la pice candidate suivante
+				int[] piece2 = {lastPiece[0]+coordToAdd[0],lastPiece[1]+coordToAdd[1]};
+				if (!passageEntreCases(lastPiece[0],lastPiece[1],piece2[0],piece2[1])) {continue;} //Si la piece candidate n'est pas connecter a la lastPiece alors passer a la piece candidate suivante
 				//Verifie que la piece candidate n'est pas déjà dans le chemin (que le serpent ne se mord pas la queue) sinon passe a la suivante
 				boolean test=false;
 				for (int i=0; i<shortestPath.size()-1; i++) {
-					ArrayList<Integer> piece3 = shortestPath.get(i);
-					if(piece2.get(0)==piece3.get(0) && piece2.get(1)==piece3.get(1)) {test=true;break;}
+					int[] piece3 = shortestPath.get(i);
+					if(piece2[0]==piece3[0] && piece2[1]==piece3[1]) {test=true;break;}
 				}
 				if (test) {continue;}
-				//Vérifie si la prochaine arrivé (piece2) n'est pas déjà une arrivé d'un autre chemin plus court, le chemin le plus long des deux est supprimé !
+				//Vérifie si la prochaine arrivé (piece2) n'est pas déjà une arrivé d'un autre chemin, le chemin le plus long des deux est supprimé !
 				test=false;
-				for (ArrayList<ArrayList<Integer>> chemin : chemins) {
+				for (ArrayList<int[]> chemin : chemins) {
 					if (chemin.get(chemin.size()-1)==piece2) {
 						if (chemin.size()>shortestPath.size()+1) {chemins.remove(chemin);}
 						else {test=true;}
@@ -198,8 +187,7 @@ public class Plateau {
 				}
 				if (test) {continue;}
 				//creation du nouveaux chemin
-				ArrayList<ArrayList<Integer>> chemin = new ArrayList<ArrayList<Integer>>();
-				Collections.copy(chemin,shortestPath);
+				ArrayList<int[]> chemin = new ArrayList<>(shortestPath);
 				chemin.add(piece2);
 				chemins.add(chemin);
 			}
@@ -300,8 +288,7 @@ public class Plateau {
 
 		int[][] resultat=new int[pos-debut][4];
 		for (int i=debut;i<pos;i++)
-			for (int j=0;j<4;j++)
-				resultat[i-debut][j]=cheminDetaille[i][j];
+			System.arraycopy(cheminDetaille[i], 0, resultat[i - debut], 0, 4);
 		return resultat;	
 	}
 
