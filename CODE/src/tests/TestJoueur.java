@@ -65,7 +65,7 @@ public class TestJoueur {
             }
         }
         //message de fin
-        message[1]="c'est terminé !";
+        message[1]="C'est terminé !";
         message[2]="Cliquez pour quitter ...";
         IG.afficherMessage(message);
         IG.miseAJourAffichage();
