@@ -7,9 +7,9 @@ import composants.Utils;
 import joueurs.Joueur;
 
 /**
- * 
+ *
  * Cette classe permet de représenter un ensemble d'élements composant une partie de jeu.
- * 
+ *
  */
 public class ElementsPartie {
 
@@ -20,27 +20,31 @@ public class ElementsPartie {
 	private int nombreJoueurs; 	// Le nombre de joueurs.
 
 	/**
-	 * 
-	 * A Faire (Quand Qui Statut)
-	 *  
+	 *
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Constructeur permettant de générer et d'initialiser l'ensemble des éléments d'une partie (sauf les joueurs qui sont donnés en paramètres).
-	 * 
-	 * Un plateau est créé en placant 49 oièces de manière aléatoire (utilisation de la méthode placerPiecesAleatoierment de la classe Plateau).
+	 *
+	 * Un plateau est créé en placant 49 pièces de manière aléatoire (utilisation de la méthode placerPiecesAleatoierment de la classe Plateau).
 	 * La pièce restante (celle non présente sur le plateau) est affectée à la pièce libre.
 	 * Les 18 objets sont créés avec des positions aléatoires sur le plateau (utilisation de la méthode Objet.nouveauxObjets)
 	 * et distribuées aux différents joueurs (utilisation de la méthode attribuerObjetsAuxJoueurs).
-	 * 
+	 *
 	 * @param joueurs Les joueurs de la partie. Les objets des joueurs ne sont pas encore attribués (c'est au constructeur de le faire).
 	 */
 	public ElementsPartie(Joueur[] joueurs) {
-		
-		// A Compléter
-		
+
+		this.joueurs=joueurs ;
+		objets = Objet.nouveauxObjets();
+		plateau = new Plateau();
+		pieceLibre = plateau.placerPiecesAleatoierment();
+		nombreJoueurs = this.joueurs.length;
+		attribuerObjetsAuxJoueurs();
 	}
 
 	/**
 	 * Un simple constructeur.
-	 * 
+	 *
 	 * @param joueurs Les joueurs de la partie.
 	 * @param objets Les 18 objets de la partie.
 	 * @param plateau Le plateau de jeu.
@@ -55,86 +59,141 @@ public class ElementsPartie {
 	}
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Méthode permettant d'attribuer les objets aux différents joueurs de manière aléatoire.
 	 */
 	private void attribuerObjetsAuxJoueurs(){
-	
-		// A Compléter
-		
+
+		for(int i = 1 ; i <= nombreJoueurs ;i++){
+			Objet[] objetJoueur = new Objet[18/nombreJoueurs];
+			for(int j = 0; j<(18/nombreJoueurs); j++){
+				objetJoueur[j] = objets[i*j];
+
+			}
+			joueurs[i].setObjetsJoueur(objetJoueur);
+		}
 	}
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Méthode permettant de récupérer les joueurs de la partie.
 	 * @return Les joueurs de la partie.
 	 */
 	public Joueur[] getJoueurs() {
-		return null; // A Modifier
+		return joueurs;
 	}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Méthode permettant de récupérer les pièces de la partie.
 	 * @return Les objets de la partie.
 	 */
 	public Objet[] getObjets() {
-		return null; // A Modifier
+		return objets;
 	}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Méthode permettant de récupérer le plateau de pièces de la partie.
 	 * @return Le plateau de pièces.
 	 */
 	public Plateau getPlateau() {
-		return null; // A Modifier
+		return plateau;
 	}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Méthode permettant de récupérer la pièce libre de la partie.
 	 * @return La pièce libre.
 	 */
 	public Piece getPieceLibre() {
-		return null; // A Modifier
+		return pieceLibre;
 	}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Méthode permettant de récupérer le nombre de joueurs de la partie.
 	 * @return Le nombre de joueurs.
 	 */
 	public int getNombreJoueurs() {
-		return -1; // A Modifier
+		return nombreJoueurs;
 	}
 
 
 	/**
-	 * A Faire (Quand Qui Statut)
-	 * 
+	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 *
 	 * Méthode modifiant les différents éléments de la partie suite à l'insertion de la pièce libre dans le plateau.
-	 * 
+	 *
 	 * @param choixEntree L'entrée choisie pour réaliser l'insertion (un nombre entre 0 et 27).
 	 */
 	public void insertionPieceLibre(int choixEntree){
-		// A Compléter
+		// recuperation des coordonnée de la case correspondante et de la direction (sens) de la fleche
+		int[] coord;
+		int[] sens;
+		if (choixEntree<7) {
+			coord = new int[]{0, choixEntree%7};
+			sens = new int[]{0, -1};
+		} else if(choixEntree<14){
+			coord = new int[]{choixEntree%7, 6};
+			sens = new int[]{-1, 0};
+		} else if(choixEntree<21){
+			coord = new int[]{6, 6-(choixEntree%7)};
+			sens = new int[]{0, 1};
+		} else {
+			coord = new int[]{6-(choixEntree%7), 0};
+			sens = new int[]{1, 0};
+		}
+		// initialisation des limite des 2 boucle nécessaire a la recuperation des coordonnée des case a deplacer
+		int limI = coord[0];
+		int limJ = coord[1];
+		if (sens[0]!=0) {
+			if (coord[0]==6){
+				limI = 0;
+			} else {
+				limI = 6;
+			}
+		}
+		if (sens[1]!=0){
+			if (coord[1]==6){
+				limJ=0;
+			} else {
+				limJ=6;
+			}
+		}
+		// recuperation des coordonnée des case a deplacer
+		int[][] cases = new int[7][2];
+		int index=0;
+		for (int i=coord[0]; i<=limI; i+=sens[0]){
+			for (int j=coord[1]; j<=limJ; j+=sens[1]){
+				cases[index]=new int[]{i,j};
+				index++;
+				if (limJ==coord[1]){break;}
+			}
+			if (limI==coord[0]){break;}
+		}
+		//deplacement des case
+		Piece nouvellePieceLibre = plateau.getPiece(cases[6][0],cases[6][1]);
+		for (int i=5; i>=0; i--){
+			plateau.positionnePiece(plateau.getPiece(cases[i][0],cases[i][1]),cases[i+1][0],cases[i+1][1]);
+		}
+		plateau.positionnePiece(pieceLibre,cases[0][0],cases[0][1]);
+		pieceLibre=nouvellePieceLibre;
 	}
-
 
 	/**
 	 * Méthode retournant une copie.
-	 * 
+	 *
 	 * @return Une copie des éléments.
 	 */
 	public ElementsPartie copy(){
@@ -146,7 +205,7 @@ public class ElementsPartie {
 			nouveauxJoueurs[i]=(this.joueurs[i]).copy(objets);
 		Plateau nouveauPlateau=(this.plateau).copy();
 		Piece nouvellePieceLibre=(this.pieceLibre).copy();
-		ElementsPartie nouveauxElements=new  ElementsPartie(nouveauxJoueurs,nouveauxObjets,nouveauPlateau,nouvellePieceLibre); 
+		ElementsPartie nouveauxElements=new  ElementsPartie(nouveauxJoueurs,nouveauxObjets,nouveauPlateau,nouvellePieceLibre);
 		return nouveauxElements;
 	}
 
