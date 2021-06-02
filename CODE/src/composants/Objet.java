@@ -1,5 +1,9 @@
 package composants;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 
  * Cette classe permet de représenter chacun des objets du jeu.
@@ -42,21 +46,22 @@ public class Objet {
 		Objet[] objets = new Objet[18];
 		int[][] posUse = new int[18][2];
 		int nbPos = 0;
-		for (int objet=0;objet<18;objet++){
-			objets[objet]= new Objet(objet);
+		int[] tab = Utils.genereTabIntAleatoirement(18);
+		for (int i=0; i<18; i++){
+			objets[i]= new Objet(tab[i]);
 			boolean t=true;
 			while (t) {
 				t = false;
-				objets[objet].positionneObjet(Utils.genererEntier(6), Utils.genererEntier(6));
-				for (int i = 0; i < nbPos; i++) {
-					if (posUse[i][0] == objets[objet].getPosLignePlateau() && posUse[i][1] == objets[objet].getPosColonnePlateau()) {
+				objets[i].positionneObjet(Utils.genererEntier(6), Utils.genererEntier(6));
+				for (int j = 0; j < nbPos; j++) {
+					if (posUse[j][0] == objets[i].getPosLignePlateau() && posUse[j][1] == objets[i].getPosColonnePlateau()) {
 						t = true;
 						break;
 					}
 				}
 			}
-			posUse[nbPos][0]=objets[objet].getPosLignePlateau();
-			posUse[nbPos][1]=objets[objet].getPosColonnePlateau();
+			posUse[nbPos][0]=objets[i].getPosLignePlateau();
+			posUse[nbPos][1]=objets[i].getPosColonnePlateau();
 			nbPos++;
 		}
 		return objets;
@@ -141,7 +146,7 @@ public class Objet {
 	 * @return true si l'objet est sur le plateau, false sinon.
 	 */
 	public boolean surPlateau() {
-		return this.surPlateau();
+		return this.surPlateau;
 
 
 	}

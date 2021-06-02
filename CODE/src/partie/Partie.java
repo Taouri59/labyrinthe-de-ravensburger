@@ -114,6 +114,7 @@ public class Partie {
 				}
 			}
 			for (Objet objet : elementsPartie.getObjets()){
+				if (!objet.surPlateau()) {continue;}
 				IG.placerObjetPlateau(objet.getNumObjet(),objet.getPosLignePlateau(),objet.getPosColonnePlateau());
 			}
 			for (Joueur player : elementsPartie.getJoueurs()){
@@ -151,19 +152,31 @@ public class Partie {
 				IG.supprimerBilleSurPlateau(coord[0],coord[1],coord[2],coord[3]);
 				IG.miseAJourAffichage();
 			}
-			//verifie si le joeur a atteint son objet a recuperer
+			joueur.setPosition(chemin[chemin.length-1][0],chemin[chemin.length-1][1]);
+			//verifie si le joeur a atteint son objet a recuperer, si oui recupere l'objet...
 			Objet objetArecupere = joueur.getObjetsJoueur()[joueur.getNombreObjetsRecuperes()];
 			if (objetArecupere.getPosLignePlateau()==joueur.getPosLigne() && objetArecupere.getPosColonnePlateau()==joueur.getPosColonne()){
-				System.out.println("Reucperation de l'objet");
 				IG.enleverObjetPlateau(objetArecupere.getPosLignePlateau(), objetArecupere.getPosColonnePlateau());
 				IG.changerObjetJoueurAvecTransparence(joueur.getNumJoueur(),objetArecupere.getNumObjet(),joueur.getNombreObjetsRecuperes());
 				objetArecupere.enleveDuPlateau();
 				joueur.recupererObjet();
 			}
+			// si le joueur a gagner (ramasser tous les objet) alors mettre l'ecran de fin
+			if (joueur.getNombreObjetsRecuperes()==joueur.getObjetsJoueur().length){
+				IG.afficherGagnant(joueur.getNumJoueur());
+				message[1]="Bravo "+joueur.getNomJoueur();
+				message[2]="Vous avez gagner la partie !";
+				message[3]="cliquez pour quitter";
+				IG.afficherMessage(message);
+				IG.miseAJourAffichage();
+				IG.attendreClic();
+				IG.fermerFenetreJeu();
+				System.exit(0);
+			}
+			//sinon passe au joueur suivant
+			numJoueur++;
+			if (numJoueur>=elementsPartie.getNombreJoueurs()){numJoueur=0;}
 		}
-
-		//IG.fermerFenetreJeu();
-		//System.exit(0);
 	}
 
 	/**
