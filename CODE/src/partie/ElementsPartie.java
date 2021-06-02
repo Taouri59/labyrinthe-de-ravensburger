@@ -143,16 +143,16 @@ public class ElementsPartie {
 		int[] sens;
 		if (choixEntree<7) {
 			coord = new int[]{0, choixEntree%7};
-			sens = new int[]{0, -1};
+			sens = new int[]{-1, 0};
 		} else if(choixEntree<14){
 			coord = new int[]{choixEntree%7, 6};
-			sens = new int[]{-1, 0};
+			sens = new int[]{0, 1};
 		} else if(choixEntree<21){
 			coord = new int[]{6, 6-(choixEntree%7)};
-			sens = new int[]{0, 1};
+			sens = new int[]{1, 0};
 		} else {
 			coord = new int[]{6-(choixEntree%7), 0};
-			sens = new int[]{1, 0};
+			sens = new int[]{0, -1};
 		}
 		// initialisation des bords des 2 boucle nécessaire a la recuperation des coordonnée des case a deplacer
 		int debI;
@@ -182,27 +182,20 @@ public class ElementsPartie {
 		// recuperation des coordonnée des case a deplacer
 		int[][] cases = new int[7][2];
 		int index=0;
-		System.out.println("debI="+debI+", finI="+finI+", sens="+sens[0]);
-		System.out.println("debJ="+debJ+", finJ="+finJ+", sens="+sens[1]);
-		for (int i = debI; i<=finI; i+=sens[0]){
-			for (int j=debJ; j<=finJ; j+=sens[1]){
+		for (int i = debI; i>=0 && i<=6; i+=sens[0]){
+			for (int j=debJ; j>=0 && j<=6; j+=sens[1]){
 				cases[index]=new int[]{i,j};
 				index++;
 				if (debJ==finJ){break;}
 			}
 			if (debI==finI){break;}
 		}
-		System.out.print("cases=[");
-		for (int[] couple : cases){
-			System.out.print("("+couple[0]+","+couple[1]+"),");
-		}
-		System.out.println("]");
 		//deplacement des case
-		Piece nouvellePieceLibre = plateau.getPiece(cases[6][0],cases[6][1]);
-		for (int i=5; i>=0; i--){
-			plateau.positionnePiece(plateau.getPiece(cases[i][0],cases[i][1]),cases[i+1][0],cases[i+1][1]);
+		Piece nouvellePieceLibre = plateau.getPiece(cases[0][0],cases[0][1]);
+		for (int i=1; i<7; i++){
+			plateau.positionnePiece(plateau.getPiece(cases[i][0],cases[i][1]),cases[i-1][0],cases[i-1][1]);
 		}
-		plateau.positionnePiece(pieceLibre,cases[0][0],cases[0][1]);
+		plateau.positionnePiece(pieceLibre,cases[6][0],cases[6][1]);
 		pieceLibre=nouvellePieceLibre;
 	}
 

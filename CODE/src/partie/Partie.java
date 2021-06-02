@@ -100,6 +100,9 @@ public class Partie {
 					IG.changerPiecePlateau(i,j,piece.getModelePiece(),piece.getOrientationPiece());
 				}
 			}
+			Piece pieceLibre = elementsPartie.getPieceLibre();
+			IG.changerPieceHorsPlateau(pieceLibre.getModelePiece(),pieceLibre.getOrientationPiece());
+			IG.miseAJourAffichage();
 			System.out.println("Insertion finie");
 		}
 
