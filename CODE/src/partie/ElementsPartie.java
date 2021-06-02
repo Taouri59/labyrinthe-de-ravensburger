@@ -71,7 +71,7 @@ public class ElementsPartie {
 				objetJoueur[j] = objets[i*j];
 
 			}
-			joueurs[i].setObjetsJoueur(objetJoueur);
+			joueurs[i-1].setObjetsJoueur(objetJoueur);
 		}
 	}
 
@@ -154,34 +154,49 @@ public class ElementsPartie {
 			coord = new int[]{6-(choixEntree%7), 0};
 			sens = new int[]{1, 0};
 		}
-		// initialisation des limite des 2 boucle nécessaire a la recuperation des coordonnée des case a deplacer
-		int limI = coord[0];
-		int limJ = coord[1];
-		if (sens[0]!=0) {
-			if (coord[0]==6){
-				limI = 0;
-			} else {
-				limI = 6;
-			}
+		// initialisation des bords des 2 boucle nécessaire a la recuperation des coordonnée des case a deplacer
+		int debI;
+		int debJ;
+		int finI;
+		int finJ;
+		if (sens[0]==0){
+			debI=coord[0];
+			finI=coord[0];
+		} else if(sens[0]==-1){
+			debI=6;
+			finI=0;
+		} else {
+			debI=0;
+			finI=6;
 		}
-		if (sens[1]!=0){
-			if (coord[1]==6){
-				limJ=0;
-			} else {
-				limJ=6;
-			}
+		if (sens[1]==0){
+			debJ=coord[1];
+			finJ=coord[1];
+		} else if(sens[1]==-1){
+			debJ=6;
+			finJ=0;
+		} else {
+			debJ=0;
+			finJ=6;
 		}
 		// recuperation des coordonnée des case a deplacer
 		int[][] cases = new int[7][2];
 		int index=0;
-		for (int i=coord[0]; i<=limI; i+=sens[0]){
-			for (int j=coord[1]; j<=limJ; j+=sens[1]){
+		System.out.println("debI="+debI+", finI="+finI+", sens="+sens[0]);
+		System.out.println("debJ="+debJ+", finJ="+finJ+", sens="+sens[1]);
+		for (int i = debI; i<=finI; i+=sens[0]){
+			for (int j=debJ; j<=finJ; j+=sens[1]){
 				cases[index]=new int[]{i,j};
 				index++;
-				if (limJ==coord[1]){break;}
+				if (debJ==finJ){break;}
 			}
-			if (limI==coord[0]){break;}
+			if (debI==finI){break;}
 		}
+		System.out.print("cases=[");
+		for (int[] couple : cases){
+			System.out.print("("+couple[0]+","+couple[1]+"),");
+		}
+		System.out.println("]");
 		//deplacement des case
 		Piece nouvellePieceLibre = plateau.getPiece(cases[6][0],cases[6][1]);
 		for (int i=5; i>=0; i--){
@@ -205,8 +220,7 @@ public class ElementsPartie {
 			nouveauxJoueurs[i]=(this.joueurs[i]).copy(objets);
 		Plateau nouveauPlateau=(this.plateau).copy();
 		Piece nouvellePieceLibre=(this.pieceLibre).copy();
-		ElementsPartie nouveauxElements=new  ElementsPartie(nouveauxJoueurs,nouveauxObjets,nouveauPlateau,nouvellePieceLibre);
-		return nouveauxElements;
+		return new  ElementsPartie(nouveauxJoueurs,nouveauxObjets,nouveauPlateau,nouvellePieceLibre);
 	}
 
 
