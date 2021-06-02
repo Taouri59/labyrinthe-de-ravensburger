@@ -15,7 +15,7 @@ public class Partie {
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (02/06/2021 MC Finie)
 	 * 
 	 * Constructeur permettant de créer et d'initialiser une nouvelle partie.
 	 */
@@ -34,6 +34,13 @@ public class Partie {
 		//placement des objets sur le plateau
 		for (Objet objet : elementsPartie.getObjets()){
 			IG.placerObjetPlateau(objet.getNumObjet(),objet.getPosLignePlateau(),objet.getPosColonnePlateau());
+		}
+		//affichage des objet a recuperer sous le nom des joueur
+		for (Joueur joueur : joueurs){
+			for (int i=0; i<joueur.getObjetsJoueur().length; i++){
+				Objet objet = joueur.getObjetsJoueur()[i];
+				IG.changerObjetJoueur(joueur.getNumJoueur(),objet.getNumObjet(),i);
+			}
 		}
 		//placement des pieces du plateau
 		for (int i=0; i<7; i++) {
@@ -59,12 +66,12 @@ public class Partie {
 	 */
 	private void parametrerEtInitialiser(){
 		// Saisie des différents paramètres
-		Object parametresJeu[];
+		Object[] parametresJeu;
 		parametresJeu=IG.saisirParametres();
-		int nombreJoueurs=((Integer)parametresJeu[0]).intValue();
+		int nombreJoueurs= (Integer) parametresJeu[0];
 		IG.creerFenetreJeu("- Version "+version, nombreJoueurs);
 		// Création des joueurs
-		Joueur joueurs[]=Joueur.nouveauxJoueurs(parametresJeu);
+		Joueur[] joueurs=Joueur.nouveauxJoueurs(parametresJeu);
 		// Création des éléments de la partie
 		elementsPartie=new ElementsPartie(joueurs);
 	}
@@ -72,7 +79,7 @@ public class Partie {
 
 	/**
 	 * 
-	 * A Faire (Quand Qui Statut)
+	 * A Faire (02/06/2021 MC En cours)
 	 * 
 	 * Méthode permettant de lancer une partie.
 	 */
@@ -84,7 +91,7 @@ public class Partie {
 			Joueur joueur = elementsPartie.getJoueurs()[numJoueur];
 			// Affichage d'un message disant c'est au tour de quelle joueur
 			message[1]="Au tour de "+joueur.getNomJoueur();
-			if (joueur.getCategorie()=="Humain"){message[2]="Orienter piece libre";}
+			if (joueur.getCategorie().equals("Humain")) {message[2]="Orienter et introduire la piece libre";}
 			else {message[2]="...";}
 			IG.afficherMessage(message);
 			IG.miseAJourAffichage();
@@ -112,7 +119,47 @@ public class Partie {
 			for (Joueur player : elementsPartie.getJoueurs()){
 				IG.placerJoueurSurPlateau(player.getNumJoueur(),player.getPosLigne(),player.getPosColonne());
 			}
+			IG.pause(50);
+			IG.deselectionnerFleche();
 			IG.miseAJourAffichage();
+			//deplacement du joueur
+			if (joueur.getCategorie().equals("Humain")) {
+				message[2]="Choisir la case d'arriver";
+				IG.afficherMessage(message);
+				IG.miseAJourAffichage();
+			}
+			int[][] chemin = null;
+			while (chemin==null) {
+				int[] caseArrivee = joueur.choisirCaseArrivee(elementsPartie);
+				chemin = elementsPartie.getPlateau().calculeChemin(joueur.getPosLigne(),joueur.getPosColonne(),caseArrivee[0],caseArrivee[1]);
+				IG.pause(50);
+				IG.deselectionnerPiecePlateau();
+			}
+			int[][] cheminDetaille = elementsPartie.getPlateau().calculeCheminDetaille(chemin,joueur.getNumJoueur());
+			if (joueur.getCategorie().equals("Humain")) {
+				message[2]="Deplacement...";
+				IG.afficherMessage(message);
+				IG.miseAJourAffichage();
+			}
+			for (int[] coord : cheminDetaille){
+				IG.placerBilleSurPlateau(coord[0],coord[1],coord[2],coord[3],joueur.getNumJoueur());
+				IG.placerJoueurPrecis(joueur.getNumJoueur(),coord[0],coord[1],coord[2],coord[3]);
+				IG.miseAJourAffichage();
+				IG.pause(10);
+			}
+			for (int[] coord : cheminDetaille){
+				IG.supprimerBilleSurPlateau(coord[0],coord[1],coord[2],coord[3]);
+				IG.miseAJourAffichage();
+			}
+			//verifie si le joeur a atteint son objet a recuperer
+			Objet objetArecupere = joueur.getObjetsJoueur()[joueur.getNombreObjetsRecuperes()];
+			if (objetArecupere.getPosLignePlateau()==joueur.getPosLigne() && objetArecupere.getPosColonnePlateau()==joueur.getPosColonne()){
+				System.out.println("Reucperation de l'objet");
+				IG.enleverObjetPlateau(objetArecupere.getPosLignePlateau(), objetArecupere.getPosColonnePlateau());
+				IG.changerObjetJoueurAvecTransparence(joueur.getNumJoueur(),objetArecupere.getNumObjet(),joueur.getNombreObjetsRecuperes());
+				objetArecupere.enleveDuPlateau();
+				joueur.recupererObjet();
+			}
 		}
 
 		//IG.fermerFenetreJeu();

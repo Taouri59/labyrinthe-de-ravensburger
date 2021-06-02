@@ -66,14 +66,14 @@ public class ElementsPartie {
 	 * Méthode permettant d'attribuer les objets aux différents joueurs de manière aléatoire.
 	 */
 	private void attribuerObjetsAuxJoueurs(){
-
-		for(int i = 1 ; i <= nombreJoueurs ;i++){
+		int compteur=0;
+		for(int i = 0 ; i < nombreJoueurs ;i++){
 			Objet[] objetJoueur = new Objet[18/nombreJoueurs];
 			for(int j = 0; j<(18/nombreJoueurs); j++){
-				objetJoueur[j] = objets[i*j];
-
+				objetJoueur[j] = objets[compteur];
+				compteur++;
 			}
-			joueurs[i-1].setObjetsJoueur(objetJoueur);
+			joueurs[i].setObjetsJoueur(objetJoueur);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class ElementsPartie {
 
 
 	/**
-	 * A Faire (de TN le 01/06/2021 Fonctionnel)
+	 * Fait (de MC le 02/06/2021 Finie et Fonctionnel)
 	 *
 	 * Méthode modifiant les différents éléments de la partie suite à l'insertion de la pièce libre dans le plateau.
 	 *
