@@ -6,6 +6,8 @@ import composants.Plateau;
 import composants.Utils;
 import joueurs.Joueur;
 
+import java.util.Arrays;
+
 /**
  *
  * Cette classe permet de représenter un ensemble d'élements composant une partie de jeu.
@@ -159,26 +161,14 @@ public class ElementsPartie {
 		int debJ;
 		int finI;
 		int finJ;
-		if (sens[0]==0){
-			debI=coord[0];
-			finI=coord[0];
-		} else if(sens[0]==-1){
-			debI=6;
-			finI=0;
-		} else {
-			debI=0;
-			finI=6;
-		}
-		if (sens[1]==0){
-			debJ=coord[1];
-			finJ=coord[1];
-		} else if(sens[1]==-1){
-			debJ=6;
-			finJ=0;
-		} else {
-			debJ=0;
-			finJ=6;
-		}
+		//limite premier boucle
+		if (sens[0]==0) {debI=coord[0]; finI=coord[0];}
+		else if(sens[0]==-1) {debI=6; finI=0;}
+		else {debI=0; finI=6;}
+		//limite deuxiéme boucle
+		if (sens[1]==0) {debJ=coord[1]; finJ=coord[1];}
+		else if(sens[1]==-1) {debJ=6; finJ=0;}
+		else {debJ=0; finJ=6;}
 		// recuperation des coordonnée des case a deplacer
 		int[][] cases = new int[7][2];
 		int index=0;
@@ -197,6 +187,30 @@ public class ElementsPartie {
 		}
 		plateau.positionnePiece(pieceLibre,cases[6][0],cases[6][1]);
 		pieceLibre=nouvellePieceLibre;
+		//deplacement des objets
+		for (Objet objet : objets){
+			if (Arrays.equals(cases[0], new int[]{objet.getPosLignePlateau(), objet.getPosColonnePlateau()})){
+				objet.positionneObjet(cases[6][0],cases[6][1]);
+				continue;
+			}
+			for (int i=1; i<7; i++){
+				if (Arrays.equals(cases[i], new int[]{objet.getPosLignePlateau(), objet.getPosColonnePlateau()})){
+					objet.positionneObjet(cases[i-1][0],cases[i-1][1]);
+				}
+			}
+		}
+		//deplacement des joueur
+		for (Joueur joueur : joueurs){
+			if (Arrays.equals(cases[0], new int[]{joueur.getPosLigne(),joueur.getPosColonne()})){
+				joueur.setPosition(cases[6][0],cases[6][1]);
+				continue;
+			}
+			for (int i=1; i<7; i++){
+				if (Arrays.equals(cases[i], new int[]{joueur.getPosLigne(),joueur.getPosColonne()})){
+					joueur.setPosition(cases[i-1][0],cases[i-1][1]);
+				}
+			}
+		}
 	}
 
 	/**

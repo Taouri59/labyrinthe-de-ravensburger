@@ -92,7 +92,6 @@ public class Partie {
 			int[] tab = joueur.choisirOrientationEntree(elementsPartie);
 			elementsPartie.getPieceLibre().setOrientation(tab[0]);
 			//insertion piece
-			System.out.println("Choix finie");
 			elementsPartie.insertionPieceLibre(tab[1]);
 			for (int i=0; i<7; i++){
 				for (int j=0; j<7; j++){
@@ -102,8 +101,18 @@ public class Partie {
 			}
 			Piece pieceLibre = elementsPartie.getPieceLibre();
 			IG.changerPieceHorsPlateau(pieceLibre.getModelePiece(),pieceLibre.getOrientationPiece());
+			for (int i=0; i<7; i++){
+				for (int j=0; j<7; j++){
+					IG.enleverObjetPlateau(i,j);
+				}
+			}
+			for (Objet objet : elementsPartie.getObjets()){
+				IG.placerObjetPlateau(objet.getNumObjet(),objet.getPosLignePlateau(),objet.getPosColonnePlateau());
+			}
+			for (Joueur player : elementsPartie.getJoueurs()){
+				IG.placerJoueurSurPlateau(player.getNumJoueur(),player.getPosLigne(),player.getPosColonne());
+			}
 			IG.miseAJourAffichage();
-			System.out.println("Insertion finie");
 		}
 
 		//IG.fermerFenetreJeu();
