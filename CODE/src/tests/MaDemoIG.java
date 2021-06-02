@@ -117,14 +117,6 @@ public class MaDemoIG {
         message[2] = "pour quitter !";
         IG.afficherMessage(message);
         IG.miseAJourAffichage();
-        int i = IG.attendreChoixEntree();
-        IG.selectionnerFleche(i);
-        IG.miseAJourAffichage();
-        message[1] = "Arrêt du programme";
-        message[2] = "dans 2 secondes !";
-        IG.afficherMessage(message);
-        IG.miseAJourAffichage();
-        IG.pause(2000);
         IG.fermerFenetreJeu();
         System.exit(0);
     }
