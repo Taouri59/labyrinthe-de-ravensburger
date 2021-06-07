@@ -1,6 +1,8 @@
 package joueurs;
 
 import composants.Objet;
+import composants.Utils;
+import partie.ElementsPartie;
 
 /**
  * 
@@ -32,7 +34,20 @@ public class JoueurOrdinateurT1 extends JoueurOrdinateur {
 		return "OrdiType1";
 	}
 
-	
+	@Override
+	public int[] choisirOrientationEntree(ElementsPartie elementsPartie) {
+		return new int[]{Utils.genererEntier(3),Utils.genererEntier(27)};
+	}
+
+	@Override
+	public int[] choisirCaseArrivee(ElementsPartie elementsPartie) {
+		Objet objetARecup = getObjetsJoueur()[getNombreObjetsRecuperes()];
+		if (elementsPartie.getPlateau().calculeChemin(getPosLigne(), getPosColonne() ,objetARecup.getPosLignePlateau(), objetARecup.getPosColonnePlateau()) == null){
+			return new int[]{getPosLigne(), getPosColonne()};
+		}
+		return new int[]{objetARecup.getPosLignePlateau(), objetARecup.getPosColonnePlateau()};
+	}
+
 	@Override
 	public Joueur copy(Objet[] objets){
 		Joueur nouveauJoueur=new JoueurOrdinateurT1(getNumJoueur(),getNomJoueur(), getNumeroImagePersonnage(),getPosLigne(),getPosColonne());
