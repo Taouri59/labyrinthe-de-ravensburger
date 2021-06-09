@@ -4,6 +4,10 @@ import composants.Objet;
 import composants.Utils;
 import partie.ElementsPartie;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Vector;
+
 /**
  * 
  * Cette classe permet de représenter un joueur ordinateur de type T1.
@@ -42,10 +46,25 @@ public class JoueurOrdinateurT1 extends JoueurOrdinateur {
 	@Override
 	public int[] choisirCaseArrivee(ElementsPartie elementsPartie) {
 		Objet objetARecup = getObjetsJoueur()[getNombreObjetsRecuperes()];
-		if (elementsPartie.getPlateau().calculeChemin(getPosLigne(), getPosColonne() ,objetARecup.getPosLignePlateau(), objetARecup.getPosColonnePlateau()) == null){
-			return new int[]{getPosLigne(), getPosColonne()};
+		if (elementsPartie.getPlateau().calculeChemin(getPosLigne(), getPosColonne() ,objetARecup.getPosLignePlateau(), objetARecup.getPosColonnePlateau()) == null) {
+			Vector<Vector<Integer>> ListPieceValide = new Vector<>();
+			for (int i = 0; i < 7; i++) {
+				for (int j = 0; j < 7; j++) {
+					// si la piece de coordonnée (i,j) n'est pas accesible passer a la piece suivante
+					if (elementsPartie.getPlateau().calculeChemin(getPosLigne(), getPosColonne(), i, j) == null) {
+						continue;
+					}
+					// sinon ajouter les coordonne a la liste des piece valide
+					Vector<Integer> ListCoord = new Vector<>();
+					ListCoord.add(i);
+					ListCoord.add(j);
+					ListPieceValide.add(ListCoord);
+				}
+			}
+			Collections.shuffle(ListPieceValide);
+			return new int[]{ListPieceValide.get(0).get(0), ListPieceValide.get(0).get(1)};
 		}
-		return new int[]{objetARecup.getPosLignePlateau(), objetARecup.getPosColonnePlateau()};
+		return new int[]{objetARecup.getPosLignePlateau(),objetARecup.getPosColonnePlateau()};
 	}
 
 	@Override

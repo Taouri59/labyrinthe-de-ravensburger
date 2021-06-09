@@ -1,6 +1,8 @@
 package joueurs;
 
 import composants.Objet;
+import composants.Utils;
+import partie.ElementsPartie;
 
 
 /**
@@ -33,7 +35,6 @@ public class JoueurOrdinateurT0 extends JoueurOrdinateur {
 		return "OrdiType0";
 	}
 
-	
 	@Override
 	public Joueur copy(Objet[] objets){
 		Joueur nouveauJoueur=new JoueurOrdinateurT0(getNumJoueur(),getNomJoueur(), getNumeroImagePersonnage(),getPosLigne(),getPosColonne());
